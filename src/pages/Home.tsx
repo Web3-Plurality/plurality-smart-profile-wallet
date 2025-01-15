@@ -90,6 +90,10 @@ const Home = () => {
         }
     }
 
+    const handleDataReturned = (data) => {
+        const receivedData = JSON.parse(JSON.stringify(data))
+        console.log("dapp receives:", receivedData);
+    };
 
 
     return (
@@ -97,7 +101,10 @@ const Home = () => {
         <div style={{
             padding: "10px"
         }}>
-            <PluralitySocialConnect options={options} />
+            <PluralitySocialConnect
+                options={options}
+                onDataReturned={handleDataReturned}
+            />
             <div style={{
                 width: '180px',
                 display: "flex",

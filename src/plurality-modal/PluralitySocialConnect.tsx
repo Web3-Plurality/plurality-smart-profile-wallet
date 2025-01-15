@@ -10,11 +10,17 @@ import { message } from 'antd';
 
 
 const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL
+
+interface LoginDataType {
+    status: boolean
+    pluralityToken: string
+}
 interface PluralitySocialConnectProps {
     options: {
         clientId?: string;
         theme: string
     };
+    onDataReturned?: (data: LoginDataType) => void
     customization?: {
         height: string;
         initialBackgroundColor: string;
@@ -259,7 +265,12 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         } else if (eventName === "litConnection") {
             this.setState({ isLitConnected: data.isConnected })
             if (data?.isConnected) {
+                const loginData = {
+                    status: data.isConnected,
+                    pluralityToken: data.token
+                }
                 localStorage.setItem('lit', 'true')
+                this.props.onDataReturned?.(loginData)
             } else {
                 localStorage.setItem('lit', 'false')
             }
