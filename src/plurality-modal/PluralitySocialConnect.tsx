@@ -22,12 +22,14 @@ interface PluralitySocialConnectProps {
     };
     onDataReturned?: (data: LoginDataType) => void
     customization?: {
-        height: string;
-        initialBackgroundColor: string;
-        initialTextColor: string;
-        flipBackgroundColor: string;
-        flipTextColor: string;
-        width: string;
+        minWidth?: string
+        height?: string
+        borderRadius?: string
+        backgroundColor?: string
+        color?: string
+        hoverBackgroundColor?: string
+        hoverTextColor?: string
+        marginTop?: string
     };
 }
 
@@ -76,7 +78,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             }
         };
     }
-
     getBaseUrl() {
         if (!this.props.options.clientId) return baseUrl
         return `${baseUrl}/rsm?client_id=${this.props.options.clientId}`;
@@ -199,6 +200,10 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         }
         return PluralityApi.sendRequest("writeToContract", address, abi, methodName, methodParams, rpc, chainId, options);
     }
+    static getLoginInfo = () => {
+        if (!this.checkLitConnection()) return;
+        return PluralityApi.sendRequest("getLoginInfo");
+    }
     // EAS Immplementation
     static setPublicData = (key: string, value: string) => {
         if (!this.checkLitConnection()) return;
@@ -216,11 +221,16 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         if (!this.checkLitConnection()) return;
         return PluralityApi.sendRequest("getPrivateData", key);
     }
-    static getSmartProfileData = () => {
+    static updateConsentOption = () => {
         if (!this.checkLitConnection()) return;
         if (this.instance) {
             this.instance.openSocialConnectPopup();
         }
+        return PluralityApi.sendRequest("updateConsentData");
+    }
+
+    static getSmartProfileData = () => {
+        if (!this.checkLitConnection()) return;
         return PluralityApi.sendRequest("getSmartProfile");
     }
 
@@ -310,7 +320,9 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                             userData={this.state.userData}
                             handleClick={this.openSocialConnectPopup}
                         />
-                        : <ProfileButton handleClick={this.openSocialConnectPopup} />
+                        : <ProfileButton
+                            customizations={this.props.customization}
+                            handleClick={this.openSocialConnectPopup} />
                 }
 
                 <PluralityModal

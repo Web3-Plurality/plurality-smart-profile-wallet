@@ -1,49 +1,53 @@
 import React from 'react'
-import { Button } from 'antd';
-import styled from 'styled-components';
+import { Button } from 'antd'
+import styled from 'styled-components'
 
-const SocialButtonWrapper = styled(Button)`
-    min-width: 180px;
-    height: 40px;
-    border-radius: 10px;
-    border: none;
-    background-color: #ACACAC;
-    color: #fff;
-    margin-top: 0.5rem;
-    transition: background-color 0.8s ease;
-    
-    &:hover {
-        background-color: #000000 !important;
-        color: #fff !important
-    }
+interface ButtonCustomizations {
+    minWidth?: string
+    height?: string
+    borderRadius?: string
+    backgroundColor?: string
+    color?: string
+    hoverBackgroundColor?: string
+    hoverTextColor?: string
+    marginTop?: string
+}
 
-    /* @media (max-width: 420px) {
-        min-width: calc(100% + 30px);
-    }
+interface ProfileButtonProps {
+    handleClick: () => void
+    customizations?: ButtonCustomizations
+}
 
-    @media (max-width: 370px) {
-        min-width: calc(100% - 30px); 
-    }
+const SocialButtonWrapper = styled(Button) <ButtonCustomizations>`
+  min-width: ${props => props.minWidth || '180px'};
+  height: ${props => props.height || '40px'};
+  border-radius: ${props => props.borderRadius || '10px'};
+  border: none;
+  background-color: ${props => props.backgroundColor || '#ACACAC'};
+  color: ${props => props.color || '#fff'};
+  margin-top: ${props => props.marginTop || '0.5rem'};
+  transition: background-color 0.8s ease;
+  
+  &:hover {
+    background-color: ${props => props.hoverBackgroundColor || '#000000'} !important;
+    color: ${props => props.hoverTextColor || '#fff'} !important;
+  }
+`
 
-    @media (max-width: 340px) {
-        min-width: calc(100% - 50px);
-        padding: 0 10px;
-    }
+const ProfileButton = ({
+    handleClick,
+    customizations
+}: ProfileButtonProps) => {
 
-    @media (max-width: 320px) {
-        min-width: 100%;
-    } */
-`;
-
-const ProfileButton = ({ handleClick }: { handleClick: () => void }) => {
     return (
         <SocialButtonWrapper
             type="default"
             onClick={handleClick}
+            {...customizations}
         >
-            <span>Connect Profile</span>
+            Connect Profile
         </SocialButtonWrapper>
     )
 }
 
-export default ProfileButton;
+export default ProfileButton

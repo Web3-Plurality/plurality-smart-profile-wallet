@@ -16,8 +16,8 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<SecondPage />} />
-        <Route path="/second" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/second" element={<SecondPage />} />
       </Routes>
     </Router>
   </React.StrictMode>

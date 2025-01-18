@@ -3,7 +3,7 @@ import { PluralitySocialConnect } from '../plurality-modal'
 import { AllAccountsDataType, ConnectedAccountDataType, SignMessageDataType, VerifySignedMessageDataType } from '../plurality-modal'
 const Home = () => {
     // const [publicInput, setPublicInput] = useState("")
-    const options = { cliendId: '', theme: 'light' };
+    const options = { clientId: '', theme: 'light' };
 
     const getAllAccountsData = async () => {
         const response = (await PluralitySocialConnect.getAllAccounts()) as AllAccountsDataType;
@@ -45,7 +45,7 @@ const Home = () => {
         const response = (await PluralitySocialConnect.getPublicData("name")) as ConnectedAccountDataType;
         if (response) {
             // const connectedAccount = response.data;
-            console.log("response", response.data)
+            console.log("Load Public Data  (Inisde dApp):", response.data)
             // alert(`Connected Account: ${response.data}`)
             // return connectedAccount?.address;
         }
@@ -81,7 +81,16 @@ const Home = () => {
         }
     }
 
-    const fetchSmartProfile = async () => {
+    const updateConsent = async () => {
+        const response = (await PluralitySocialConnect.updateConsentOption()) as ConnectedAccountDataType;
+        if (response) {
+            const smartProfileData = response.data;
+            alert(`Connected Account: ${JSON.stringify(response.data)}`)
+            return smartProfileData;
+        }
+    }
+
+    const fetchSmartProfileData = async () => {
         const response = (await PluralitySocialConnect.getSmartProfileData()) as ConnectedAccountDataType;
         if (response) {
             const smartProfileData = response.data;
@@ -90,9 +99,19 @@ const Home = () => {
         }
     }
 
+    const fetchLoginInfo = async () => {
+        const response = (await PluralitySocialConnect.getLoginInfo()) as ConnectedAccountDataType;
+        if (response) {
+            const loginInfoData = response.data;
+            console.log("Connected Account Info (Inisde dApp)::", loginInfoData);
+            alert(`Connected Account: ${JSON.stringify(loginInfoData)}`)
+            return loginInfoData;
+        }
+    }
+
     const handleDataReturned = (data) => {
         const receivedData = JSON.parse(JSON.stringify(data))
-        console.log("dapp receives:", receivedData);
+        console.log("Login info callback data (Inisde dApp)::", receivedData);
     };
 
 
@@ -120,7 +139,9 @@ const Home = () => {
                 <button onClick={() => storePublicData()}>Set Public Data</button>
                 <button onClick={() => loadPrivateData()}>Get Private Data</button>
                 <button onClick={() => storePrivateData()}>Set Private Data</button>
-                <button onClick={() => fetchSmartProfile()}>Get SmartProfile Data</button>
+                <button onClick={() => fetchLoginInfo()}>Get Login Info</button>
+                <button onClick={() => updateConsent()}>Update Consent</button>
+                <button onClick={() => fetchSmartProfileData()}>Get Smart Profile Data</button>
             </div>
             {/* <input onChange={(e)=>{}}/> */}
         </div>
