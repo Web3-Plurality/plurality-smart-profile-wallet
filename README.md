@@ -1,5 +1,5 @@
-# Plurality Social Connect Widget
-This repo contains the functionality to load the plurality identity oracle as a popup widget.
+# Plurality Social Connect
+This repo contains the functionality to load the plurality smart profile wallet as an embedded widget.
 
 ## To run
 ```
@@ -10,108 +10,158 @@ npm install && npm run start
 
 Here is a basic demo how it can be used in any react project
 ```
-import PluralitySocialConnect from 'plurality-social-connect';
+import { PluralitySocialConnect } from '@plurality-network/smart-profile-wallet';
 
 const App = () => {
-    const childRef = useRef(null);
-    // Handle the data returned from the widget
+
+    const options = { cliendId: '', theme: 'light' };
+
     const handleDataReturned = (data) => {
         const receivedData = JSON.parse(JSON.stringify(data))
         console.log("dapp receives:", receivedData);
-        alert(JSON.stringify(data));
-        childRef.current.closeSocialConnectPopup();
-        // Handle the received data in the external webpage
-        // ... (perform actions with the received data)
     };
 
     return (
         <div>
-            <PluralitySocialConnect
-                options={{ apps: 'facebook,twitter' }}
+             <PluralitySocialConnect
+                options={options}
                 onDataReturned={handleDataReturned}
-                // all customization params are optional
-                // customization={{ height: '200px', width: '500px', initialBackgroundColor: '#E8A123', initialTextColor: '#FFFFFF', flipBackgroundColor: '#12AE83', flipTextColor: '#FFFFFF'}}
-                ref={childRef}
             />
         </div>
     );
 };
 ```
-## Calling web3 functions through the social connect
 
-Since the Metamask gets connected to the social connect, all web3 calls also need to be done through the social connect.
-You can use the following functions to call the blockchain layer:
+### Options
+There are two fields in the options object. 
+`clientId` is the id that's specific to your application. If you use an empty clientId, it will pick up the default settings. However, if you want to customize the widget according to your own needs, then refer our [docs](https://docs.plurality.network) to find out the way to get your own clientId.
+`theme` can be either light or dark
+
+ 
+## Calling web3 functions through the Smart Profile Wallet
+
+Every web3 login solution needs to interact with the blockchain for carrying out various functions. Once the widget is embedded and the user connects their profile and a session is stored in the local storage, then plurality’s wallet solution provides the following standard web3 functions. To call them in your application, use the following code samples
+
 
 ### Get All Connected Accounts
 Returns all accounts that have been connected through the social connect
 ```
-PluralitySocialConnect.getAllAccounts() 
+(await PluralitySocialConnect.getAllAccounts()) as AllAccountsDataType;
 Returns: [0x123…, 0x456…]
 ```
 
 ### Get Current Connected Account
 Get current account connected to the social connect
 ```
-PluralitySocialConnect.getConnectedAccount() 
+(await PluralitySocialConnect.getConnectedAccount()) as ConnectedAccountDataType;
 Returns: 0x123…
 ```
 
 ### Get Signature
 Gets the message signed using the connected account and returns the signature
 ```
-PluralitySocialConnect.getMessageSignature(message: string) 
-Example:
-PluralitySocialConnect.getMessageSignature("Example `personal_sign` message.")
+(await PluralitySocialConnect.getMessageSignature(message)) as SignMessageDataType;
 ```
 
 ### Verify Message Signature
 Verify if the signature matches the message using the current connected account and returns boolean true or false
 ```
-PluralitySocialConnect.verifyMessageSignature(message: string, signature: string) 
-Example: PluralitySocialConnect.verifyMessageSignature("Example `personal_sign` message.", "0xa1379711716d214c84c146bbaa9d03d77895526b8620bcae67a76f824be6fd3a43795645a31f758eaed39ee6aa5490a979233711d4e9d6a2e30fa09a5e9c808a1b")
+(await PluralitySocialConnect.verifyMessageSignature(message, key)) as VerifySignedMessageDataType;
 ```
 ### Get Balance
 Returns balance of the current account in wei. You need to convert it to required denomination yourself
 ```
-PluralitySocialConnect.getBalance()
+(await PluralitySocialConnect.getBalance(rpc, chainId)) as GetBalanceDataType;
 ```
 
 ### Send Transaction
-Send a certain amount (in ethers) to a certain address. Returns the transaction object
+Send a certain amount (in ethers) to a certain address. Returns the transaction object. 
+
+Please note that since Plurality profiles are chain agnostic, you need to provide the RPC and the chainId to ensure that balance is being read from the current read. You can find the RPC and the chainId of your preferred chain from [here](https://chainlist.org/)
+
 ```
-PluralitySocialConnect.sendTransaction(sendToAddress: string, value: string) 
-Example:  PluralitySocialConnect.sendTransaction("0xe613B4cd69Fe20E8bd0F0D79a264210886bA1AA2","0.01")
+(await PluralitySocialConnect.sendTransaction(rawTx, rpc, chainId)) as SendTransactionDataType;
 ```
 
 ### Get Block Number
-Returns the latest block number
+Returns the latest block number. Please note that since Plurality profiles are chain agnostic, you need to provide the RPC and the chainId to ensure that balance is being read from the current read. You can find the RPC and the chainId of your preferred chain from [here](https://chainlist.org/)
+
 ```
-PluralitySocialConnect.getBlockNumber()
+(await PluralitySocialConnect.getBlockNumber(rpc, chainId)) as GetBlockNumberDataType;
 ```
 
 ### Get Transaction Count
 Returns the transaction count of the given address
 ```
-PluralitySocialConnect.getTransactionCount(address: string) 
-Example: PluralitySocialConnect.getTransactionCount("0xe613B4cd69Fe20E8bd0F0D79a264210886bA1AA2")
+(await PluralitySocialConnect.getTransactionCount(address, rpc, chainId)) as GetTransactionCountDataType;
 ```
 
 ### Read from contract
 Returns the response of executing the given get method of the contract with the given parameters
 ```
-PluralitySocialConnect.readFromContract(contractAddress: string, abi: string, methodName: string, methodParams: string[]) 
-Example:
-   const abi = '[{"inputs":[],"name":"retrieve","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"num","type":"uint256"}],"name":"store","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
-PluralitySocialConnect.readFromContract("0x8E26aa0b6c7A396C92237C6a87cCD6271F67f937",abi,"retrieve", [])
+(await PluralitySocialConnect.readFromContract(address, abiVal, action, params, rpc, chainId)) as ReadFromContractDataType;
 ```
 
 ### Write to contract
 Returns the transaction response of executing the given write method of the contract with the given parameters
 ```
-PluralitySocialConnect.writeToContract(contractAddress: string, abi: string, methodName: string, methodParam: string[]) 
-Example:
-   const abi = '[{"inputs":[],"name":"retrieve","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"num","type":"uint256"}],"name":"store","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
-PluralitySocialConnect.writeToContract("0x8E26aa0b6c7A396C92237C6a87cCD6271F67f937",abi, "store", "5")
+(await PluralitySocialConnect.writeToContract(address, abiVal, action, params, rpc, chainId, options)) as WriteToContractDataType;
+```
+
+## Calling profile functions through the Smart Profile Wallet
+Each wallet created through this embedded widget has a profile attached to it which contains basic user information like name, bio, avatar and description. Moreover, it also has the user's interests & reputation which is analysed from the social accounts connected to that profile.
+
+As an application developer, you can get profile data from the connected wallet.
+
+Every time the user does a successful login, you will get a response in the data handler that’s attached to the embedded widget
+
+```
+const handleDataReturned = (data) => {
+    const receivedData = JSON.parse(JSON.stringify(data))
+    console.log("dapp receives:", receivedData);
+};
+
+<PluralitySocialConnect
+    options={options}
+    onDataReturned={handleDataReturned}
+/>
+```
+
+However, if you want to fetch the smart profile data at any point later, you can use the following function.
+
+### Get Smart Profile Data
+```
+(await PluralitySocialConnect.getSmartProfileData()) as ConnectedAccountDataType;
+```
+
+### Set Public Data
+
+As a decentralized application developer, you might also need to store user’s information in a verifiable, decentralized, but gasless and privacy-preserving way. If you want to store any information about the user derived from their actions on your platform, you can set that information in your user’s profile. Next time when the user logs in to this dApp again, then the application will have access to this data again. 
+
+```
+(await PluralitySocialConnect.setPublicData("key", "value")) as ConnectedAccountDataType;
+```
+### Get Public Data
+To get previously stored data, the application can get it using the following function
+
+```
+(await PluralitySocialConnect.getPublicData("name")) as ConnectedAccountDataType;
+```
+
+### Set Private Data
+
+Since user profiles are shared amongst different apps and platforms, if an application wants to ensure that the data you put in your user’s profile cannot be seen by any other application, then the application needs to set it in a private way.  
+
+```
+(await PluralitySocialConnect.setPrivateData("work", "Plurality")) as ConnectedAccountDataType;
+```
+
+### Get Private Data
+
+To get previously stored data, the application can get it using the following function
+
+```
+(await PluralitySocialConnect.getPrivateData("work")) as ConnectedAccountDataType;
 ```
 
 ## To publish new version on npm registry
