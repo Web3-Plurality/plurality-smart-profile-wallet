@@ -4,7 +4,7 @@ import { GetBalanceDataType, GetBlockNumberDataType, GetTransactionCountDataType
 
 const SecondPage = () => {
     // const options = { apps: "example", clientId: 'c4034665-9aa0-4e00-91fb-7485477166dc', theme: 'dark' };
-    const options = { clientId: '', theme: 'light' };
+    const options = { clientId: '', theme: 'light', text: 'Customizable Button' };
     const abi = '[{"inputs":[],"name":"retrieve","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"num","type":"uint256"}],"name":"store","outputs":[],"stateMutability":"nonpayable","type":"function"}]';
     const rawTx = JSON.stringify({
         to: "0xe613B4cd69Fe20E8bd0F0D79a264210886bA1AA2",
@@ -98,7 +98,7 @@ const SecondPage = () => {
                 options={options}
                 customization={{
                     backgroundColor: 'cyan',
-                    color: "black"
+                    color: "black",
                 }} />
             <div style={{
                 width: '180px',

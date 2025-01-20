@@ -17,8 +17,9 @@ interface LoginDataType {
 }
 interface PluralitySocialConnectProps {
     options: {
-        clientId?: string;
         theme: string
+        clientId?: string
+        text?: string
     };
     onDataReturned?: (data: LoginDataType) => void
     customization?: {
@@ -30,6 +31,8 @@ interface PluralitySocialConnectProps {
         hoverBackgroundColor?: string
         hoverTextColor?: string
         marginTop?: string
+        fontSize?: string
+        fontFamily?: string
     };
 }
 
@@ -322,6 +325,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                         />
                         : <ProfileButton
                             customizations={this.props.customization}
+                            text={this.props.options.text || 'Connect Profile'}
                             handleClick={this.openSocialConnectPopup} />
                 }
 
