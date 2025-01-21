@@ -33,9 +33,10 @@ const App = () => {
 ```
 
 ### Options
-There are two fields in the options object. 
+There are three fields in the options object. 
 `clientId` is the id that's specific to your application. If you use an empty clientId, it will pick up the default settings. However, if you want to customize the widget according to your own needs, then refer our [docs](https://docs.plurality.network) to find out the way to get your own clientId.
-`theme` can be either light or dark
+`theme` can be either light or dark.
+`text` can be any text that will be displayed on the button. If you use an empty text, it will pick up the default text
 
  
 ## Calling web3 functions through the Smart Profile Wallet
@@ -171,12 +172,16 @@ To get previously stored data, the application can get it using the following fu
 - Run `npm publish` to publish it to public npm registry
 
 ## Customizable attributes
+- ```minWidth```: Specify the minimum width of the button
 - ```height```: Specify the height of the button
-- ```width```: Specify the width of the button
-- ```initialBackgroundColor```: Specify the intial background color of the button
-- ```initialTextColor```: Specify the intial text color of the button
-- ```flipBackgroundColor```: Specify the flipped background color of the button
-- ```flipTextColor```: Specify the flipped text color of the button
+- ```color```: Specify the font color of the button
+- ```hoverTextColor```: Specify the font color on hover of the button
+- ```fontSize```: Specify the font size of the button
+- ```fontFamily```: Specify the font family of the button
+- ```backgroundColor```: Specify the background color of the button
+- ```hoverBackgroundColor```: Specify the background color on hover of the button
+- ```marginTop```: Specify the top margin of the button
+- ```borderRadius```: Specify the border radius of the button
 
 ## Release
 - The package is released on NPM registry via a build pipeline on merge to main

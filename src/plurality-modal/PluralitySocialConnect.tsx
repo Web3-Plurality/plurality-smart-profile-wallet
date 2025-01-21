@@ -25,14 +25,14 @@ interface PluralitySocialConnectProps {
     customization?: {
         minWidth?: string
         height?: string
-        borderRadius?: string
-        backgroundColor?: string
         color?: string
-        hoverBackgroundColor?: string
         hoverTextColor?: string
-        marginTop?: string
         fontSize?: string
         fontFamily?: string
+        backgroundColor?: string
+        hoverBackgroundColor?: string
+        marginTop?: string
+        borderRadius?: string
     };
 }
 
