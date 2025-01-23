@@ -11,9 +11,12 @@ interface ButtonCustomizations {
     hoverBackgroundColor?: string
     hoverTextColor?: string
     marginTop?: string
+    fontSize?: string
+    fontFamily?: string
 }
 
 interface ProfileButtonProps {
+    text?: string
     handleClick: () => void
     customizations?: ButtonCustomizations
 }
@@ -23,6 +26,8 @@ const SocialButtonWrapper = styled(Button) <ButtonCustomizations>`
   height: ${props => props.height || '40px'};
   border-radius: ${props => props.borderRadius || '10px'};
   border: none;
+  font-size: ${props => props.fontSize || '14px'};
+  font-family: ${props => props.fontFamily || 'Lexend, sans-serif'};;
   background-color: ${props => props.backgroundColor || '#ACACAC'};
   color: ${props => props.color || '#fff'};
   margin-top: ${props => props.marginTop || '0.5rem'};
@@ -35,6 +40,7 @@ const SocialButtonWrapper = styled(Button) <ButtonCustomizations>`
 `
 
 const ProfileButton = ({
+    text,
     handleClick,
     customizations
 }: ProfileButtonProps) => {
@@ -45,7 +51,7 @@ const ProfileButton = ({
             onClick={handleClick}
             {...customizations}
         >
-            Connect Profile
+            {text}
         </SocialButtonWrapper>
     )
 }

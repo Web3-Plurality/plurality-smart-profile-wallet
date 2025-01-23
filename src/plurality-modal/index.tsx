@@ -1,4 +1,19 @@
-import { AllAccounts, AllAccountsDataType, ConnectedAccountDataType, GetBalanceDataType, GetBlockNumberDataType, GetTransactionCountDataType, GlobalDataResponse, Provider, ReadFromContractDataType, SendTransactionDataType, SignMessageDataType, SwitchNetworkDataType, VerifySignedMessageDataType, WriteToContractDataType } from './types/returnTypes';
+import {
+    AllAccounts,
+    AllAccountsDataType,
+    ConnectedAccountDataType,
+    GetBalanceDataType,
+    GetBlockNumberDataType,
+    GetTransactionCountDataType,
+    GlobalDataResponse,
+    Provider,
+    ReadFromContractDataType,
+    SendTransactionDataType,
+    SignMessageDataType,
+    SwitchNetworkDataType,
+    VerifySignedMessageDataType,
+    WriteToContractDataType
+} from './types/returnTypes';
 
 export { PluralitySocialConnect } from './PluralitySocialConnect';
 
