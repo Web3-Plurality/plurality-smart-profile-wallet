@@ -3,7 +3,7 @@ import { PluralitySocialConnect } from '../plurality-modal'
 import { AllAccountsDataType, ConnectedAccountDataType, SignMessageDataType, VerifySignedMessageDataType } from '../plurality-modal'
 const Home = () => {
     // const [publicInput, setPublicInput] = useState("")
-    const options = { clientId: '', theme: 'light' };
+    const options = { clientId: '9a4e2a19-42e6-4b75-8710-1246439eb1db', theme: 'light' };
 
     const getAllAccountsData = async () => {
         const response = (await PluralitySocialConnect.getAllAccounts()) as AllAccountsDataType;

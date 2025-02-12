@@ -275,7 +275,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     handleIframeMessage = (event: MessageEvent) => {
-        const baseUrl = this.getBaseUrl();
         if (event.origin !== baseUrl) return;
         const { eventName, data } = event.data;
         if (eventName === "metamaskConnection") {
