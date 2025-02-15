@@ -52,6 +52,10 @@ export interface ReadFromContractDataType extends GlobalDataResponse {
 export interface WriteToContractDataType extends GlobalDataResponse {
     data: string
 }
+
+export interface PrivateAppData extends GlobalDataResponse {
+    data: string
+}
 export interface SwitchNetworkDataType extends GlobalDataResponse {
     data: string
 }

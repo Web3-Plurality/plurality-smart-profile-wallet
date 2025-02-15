@@ -237,6 +237,16 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return PluralityApi.sendRequest("getSmartProfile");
     }
 
+    static getAppData = () => {
+        if (!this.checkLitConnection()) return;
+        return PluralityApi.sendRequest("getAppData");
+    }
+
+    static setAppData = (extendedData: string) => {
+        if (!this.checkLitConnection()) return;
+        return PluralityApi.sendRequest("setAppData", extendedData);
+    }
+
     // static switchNetwork = (rpc: string, chainId: string) => {
     //     if (!this.checkLitConnection()) return;
     //     return PluralityApi.sendRequest("switchNetwork", rpc, chainId);
@@ -265,7 +275,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     handleIframeMessage = (event: MessageEvent) => {
-        const baseUrl = this.getBaseUrl();
         if (event.origin !== baseUrl) return;
         const { eventName, data } = event.data;
         if (eventName === "metamaskConnection") {

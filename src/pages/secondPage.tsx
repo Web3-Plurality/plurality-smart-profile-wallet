@@ -1,6 +1,7 @@
 import React from 'react'
 import { PluralitySocialConnect } from '../plurality-modal'
 import { GetBalanceDataType, GetBlockNumberDataType, GetTransactionCountDataType, ReadFromContractDataType, SendTransactionDataType, SwitchNetworkDataType, WriteToContractDataType } from '../plurality-modal';
+import { PrivateAppData } from '../plurality-modal/types/returnTypes';
 
 const SecondPage = () => {
     // const options = { apps: "example", clientId: 'c4034665-9aa0-4e00-91fb-7485477166dc', theme: 'dark' };
@@ -70,6 +71,24 @@ const SecondPage = () => {
         }
     }
 
+    const fetchAppData = async () => {
+        const response = (await PluralitySocialConnect.getAppData()) as PrivateAppData;
+        console.log("res", response)
+        if (response) {
+            const appData = response.data;
+            alert(`Extended Private Data: ${JSON.stringify(appData)}`)
+            return appData;
+        }
+    }
+
+    const writeAppData = async (appData: string) => {
+        const response = (await PluralitySocialConnect.setAppData(appData)) as WriteToContractDataType;
+        console.log("res", response)
+        if (response) {
+            console.log("writeAppData Response", response.data)
+        }
+    }
+
     // const switchNetwork = async (rpc: string, chainId: string) => {
     //     const response = (await PluralitySocialConnect.switchNetwork(rpc, chainId)) as SwitchNetworkDataType;
     //     if (response) {
@@ -88,6 +107,10 @@ const SecondPage = () => {
     //         return network;
     //     }
     // }
+
+    const extendedData = {
+        test: 'ExtentedPrivateData'
+    }
 
     return (
 
@@ -115,6 +138,9 @@ const SecondPage = () => {
                 <button onClick={() => writeToContractData("0x8E26aa0b6c7A396C92237C6a87cCD6271F67f937", abi, "store", txParams, "https://ethereum-sepolia.rpc.subquery.network/public", "11155111", txOptions)}>Write Contract</button>
                 {/* <button onClick={() => switchNetwork( "https://ethereum-sepolia.rpc.subquery.network/public", "11155111")}>Switch to Sepolia</button>
                 <button onClick={() => fetchNetwork()}>Fetch the current network</button> */}
+                <button onClick={() => fetchAppData()}>Get App Data</button>
+                <button onClick={() => writeAppData(JSON.stringify(extendedData))}>Set App Data</button>
+                {/* <button onClick={() => writeAppData("https://ethereum-sepolia.rpc.subquery.network/public", "11155111")}>Get Balance</button> */}
             </div>
 
         </div>
