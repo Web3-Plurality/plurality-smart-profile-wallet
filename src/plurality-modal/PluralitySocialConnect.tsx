@@ -83,7 +83,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
     getBaseUrl() {
         if (!this.props.options.clientId) return baseUrl
-        return `${baseUrl}/rsm?client_id=${this.props.options.clientId}`;
+        return `${baseUrl}/?client_id=${this.props.options.clientId}`;
     }
 
     static openSocialConnectPopup = () => {
