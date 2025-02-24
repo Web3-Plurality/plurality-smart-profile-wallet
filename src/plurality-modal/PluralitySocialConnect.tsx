@@ -237,14 +237,14 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return PluralityApi.sendRequest("getSmartProfile");
     }
 
-    static getAppData = () => {
+    static getAppData = (key: string) => {
         if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("getAppData");
+        return PluralityApi.sendRequest("getAppData", key);
     }
 
-    static setAppData = (extendedData: string) => {
+    static setAppData = (key: string, value: string) => {
         if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("setAppData", extendedData);
+        return PluralityApi.sendRequest("setAppData", key, value);
     }
 
     // static switchNetwork = (rpc: string, chainId: string) => {
