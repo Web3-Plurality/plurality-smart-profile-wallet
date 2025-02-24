@@ -15,7 +15,10 @@ import {
     WriteToContractDataType
 } from './types/returnTypes';
 
-export { PluralitySocialConnect } from './PluralitySocialConnect';
+import { PluralitySocialConnect } from './PluralitySocialConnect';
+
+
+export { PluralitySocialConnect } 
 
 export type {
     GlobalDataResponse,
@@ -33,3 +36,5 @@ export type {
     WriteToContractDataType,
     SwitchNetworkDataType
 };
+
+export default PluralitySocialConnect; 

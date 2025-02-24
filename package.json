@@ -4,6 +4,8 @@
   "description": "A React component for social connect popup.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "unpkg": "dist/index.umd.js",
+  "jsdelivr": "dist/index.umd.js",
   "keywords": [
     "web3",
     "plurality",
@@ -41,8 +43,7 @@
     "webpack": "webpack",
     "package": "npm run build && npm run webpack",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "rollup": "rollup -c"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
