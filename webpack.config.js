@@ -2,24 +2,18 @@ const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-const env = dotenv.config().parsed;
+const env = dotenv.config().parsed || {};
 
 const envKeys = Object.keys(env).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
   return prev;
 }, {});
 
-module.exports = {
+const commonConfig = {
   mode: 'production',
-  entry: './src/plurality-modal',
-  output: {
-    path: path.resolve('dist'),
-    filename: 'index.js',
-    libraryTarget: 'commonjs2',
-  },
+  entry: './src/plurality-modal', 
   module: {
     rules: [
-      // JavaScript and TypeScript rules
       {
         test: /\.tsx?$/,
         exclude: [
@@ -64,28 +58,51 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'],
-    alias: {
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-    }
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
-  externals: {
-    // Don't bundle react or react-dom      
-    react: {
-      commonjs: "react",
-      commonjs2: "react",
-      amd: "React",
-      root: "React"
-    },
-    "react-dom": {
-      commonjs: "react-dom",
-      commonjs2: "react-dom",
-      amd: "ReactDOM",
-      root: "ReactDOM"
-    }
-  },
-  plugins: [
-    new webpack.DefinePlugin(envKeys)
-  ]
+  plugins: [new webpack.DefinePlugin(envKeys)]
 };
+
+// Export multiple builds
+module.exports = [
+  // ✅ CommonJS Build
+  {
+    ...commonConfig,
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.js',
+      libraryTarget: 'commonjs2',
+    },
+    externals: {
+      react: 'react',
+      'react-dom': 'react-dom'
+    }
+  },
+
+  // ✅ UMD Build (For CDN & Browser Compatibility)
+  {
+    ...commonConfig,
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.umd.js',
+      library: 'PluralitySocialConnect',
+      libraryTarget: 'umd',
+      globalObject: 'this', 
+      libraryExport: 'default',
+    },
+    externals: {
+      react: {
+        commonjs: 'react',
+        commonjs2: 'react',
+        amd: 'React',
+        root: 'React'
+      },
+      'react-dom': {
+        commonjs: 'react-dom',
+        commonjs2: 'react-dom',
+        amd: 'ReactDOM',
+        root: 'ReactDOM'
+      }
+    }
+  }
+];
