@@ -51,8 +51,8 @@ class PluralityApi {
                     else if (eventName === 'getBlockNumber') (payload as RpcPayload).rpc = args[0]
                     else if (eventName === 'switchNetwork') (payload as RpcPayload).rpc = args[0]
                     else if (eventName === 'getPublicData') (payload as DataPayload).key = args[0]
-                    else if (eventName === 'setPublicData') (payload as DataPayload).key = args[0]
-                    else if (eventName === 'getPrivateData') (payload as DataPayload).key = args[0]
+                    else if (eventName === 'setPublicData' || eventName === 'setAppData' ) (payload as DataPayload).key = args[0]
+                    else if (eventName === 'getPrivateData' || eventName === 'getAppData') (payload as DataPayload).key = args[0]
                     else if (eventName === 'setPrivateData') (payload as DataPayload).key = args[0]
                     else (payload as MessagePayload).message = args[0];
                 }
@@ -64,7 +64,7 @@ class PluralityApi {
                     else if (eventName === 'getBlockNumber') (payload as ChainIdPayload).chain_id = args[1]
                     else if (eventName === 'sendTransaction') (payload as RpcPayload).rpc  = args[1]
                     else if (eventName === 'getTransactionCount') (payload as RpcPayload).rpc  = args[1]
-                    else if (eventName === 'setPublicData') (payload as DataPayload).value = args[1]
+                    else if (eventName === 'setPublicData' || eventName === 'setAppData') (payload as DataPayload).value = args[1]
                     else if (eventName === 'setPrivateData') (payload as DataPayload).value = args[1]
                     else (payload as MessageSignaturePayload).signature = args[1];
                 }

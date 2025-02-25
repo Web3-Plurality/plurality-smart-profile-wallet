@@ -72,7 +72,7 @@ const SecondPage = () => {
     }
 
     const fetchAppData = async () => {
-        const response = (await PluralitySocialConnect.getAppData()) as PrivateAppData;
+        const response = (await PluralitySocialConnect.getAppData('test')) as PrivateAppData;
         console.log("res", response)
         if (response) {
             const appData = response.data;
@@ -81,8 +81,8 @@ const SecondPage = () => {
         }
     }
 
-    const writeAppData = async (appData: string) => {
-        const response = (await PluralitySocialConnect.setAppData(appData)) as WriteToContractDataType;
+    const writeAppData = async () => {
+        const response = (await PluralitySocialConnect.setAppData("test", 'ExtentedPrivateData')) as WriteToContractDataType;
         console.log("res", response)
         if (response) {
             console.log("writeAppData Response", response.data)
@@ -108,9 +108,6 @@ const SecondPage = () => {
     //     }
     // }
 
-    const extendedData = {
-        test: 'ExtentedPrivateData'
-    }
 
     return (
 
@@ -139,7 +136,7 @@ const SecondPage = () => {
                 {/* <button onClick={() => switchNetwork( "https://ethereum-sepolia.rpc.subquery.network/public", "11155111")}>Switch to Sepolia</button>
                 <button onClick={() => fetchNetwork()}>Fetch the current network</button> */}
                 <button onClick={() => fetchAppData()}>Get App Data</button>
-                <button onClick={() => writeAppData(JSON.stringify(extendedData))}>Set App Data</button>
+                <button onClick={() => writeAppData()}>Set App Data</button>
                 {/* <button onClick={() => writeAppData("https://ethereum-sepolia.rpc.subquery.network/public", "11155111")}>Get Balance</button> */}
             </div>
 
