@@ -3,13 +3,16 @@ import './css/styles.css'
 
 import PluralityModal from './PluralityModal';
 import PluralityApi from './PluralityApi'
-import ProfileConnectedButton from './components/ConnectedProfile';
-import ProfileButton from './components/profileButton';
+// import ProfileConnectedButton from './components/ConnectedProfile';
+// import ProfileButton from './components/profileButton';
 import { User } from './types/payloadTypes';
 import { message } from 'antd';
 
 
-const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL
+const validSteps = ['profile', 'socialConnect', 'wallet', 'profileSettings']
+
+
+const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL || '*'
 
 interface LoginDataType {
     status: boolean
@@ -152,6 +155,15 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return true;
     };
 
+    static checkConnection = () => {
+        const isConnected = localStorage.getItem('lit') || 'false';
+        if (JSON.parse(isConnected)) {
+            alert('Profile already connected!');
+            return false;
+        }
+        return true;
+    };
+
     static getAllAccounts = async (rpc: string = '', chainId: string = '') => {
         if (!this.checkLitConnection()) return;
         return PluralityApi.sendRequest("getAllAccounts");
@@ -254,6 +266,32 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return PluralityApi.sendRequest("setAppData", key, value);
     }
 
+    static navigateTo = (step: string) => {
+        if (!this.checkLitConnection()) return;
+        if(!validSteps.includes(step)){
+            alert('This page does not exist!');
+            return false;
+        }
+        PluralityApi.sendRequest("navigateTo", step);
+        this.openSocialConnectPopup()
+    }
+
+    static connectProfile = () => {
+        if (!this.checkConnection()) return;
+        this.openSocialConnectPopup()
+    }
+
+    static disconnectProfile = () => {
+        if (!this.checkLitConnection()) return;
+        const iframe = document.getElementById('iframe') as HTMLIFrameElement;
+
+        if (iframe?.contentWindow) {
+          const messageId = `msg-${Date.now()}`;
+          const payload = { id: messageId, type: 'logoutRequest' };
+          iframe.contentWindow.postMessage(payload, baseUrl);
+        }
+    }
+
     // static switchNetwork = (rpc: string, chainId: string) => {
     //     if (!this.checkLitConnection()) return;
     //     return PluralityApi.sendRequest("switchNetwork", rpc, chainId);
@@ -339,7 +377,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     render() {
         return (
             <>
-                {
+                {/* {
                     this.state.isMetamaskConnected || this.state.isLitConnected
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
@@ -350,7 +388,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                             customizations={this.props.customization}
                             text={this.props.options.text || 'Connect Profile'}
                             handleClick={this.openSocialConnectPopup} />
-                }
+                } */}
 
                 <PluralityModal
                     closePlurality={this.closeSocialConnectPopup}
