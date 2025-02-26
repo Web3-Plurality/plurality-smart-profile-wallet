@@ -2,10 +2,16 @@
   "name": "@plurality-network/smart-profile-wallet",
   "version": "2.14.0",
   "description": "A React component for social connect popup.",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "unpkg": "dist/index.umd.js",
   "jsdelivr": "dist/index.umd.js",
+  "exports": {
+    "import": "./dist/index.esm.js",
+    "require": "./dist/index.cjs.js",
+    "default": "./dist/index.esm.js"
+  },
   "keywords": [
     "web3",
     "plurality",

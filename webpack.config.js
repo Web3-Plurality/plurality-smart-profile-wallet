@@ -70,7 +70,7 @@ module.exports = [
     ...commonConfig,
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: 'index.js',
+      filename: 'index.cjs.js',
       libraryTarget: 'commonjs2',
     },
     externals: {
@@ -103,6 +103,28 @@ module.exports = [
         amd: 'ReactDOM',
         root: 'ReactDOM'
       }
+    }
+  },
+
+  // ✅ ESM Build (For Modern JS Apps)
+  {
+    ...commonConfig,
+    output: 
+    {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.esm.js',
+      libraryTarget: 'module',   // Ensures proper ESM module format
+      libraryExport: 'named',    // Use 'named' if your package has multiple exports
+    },
+    experiments: 
+    {
+      outputModule: true  // Required for using 'module' as libraryTarget
+    },
+    externalsType: 'module', // Ensures correct import behavior for externals
+    externals: 
+    {
+      react: 'react', 
+      'react-dom': 'react-dom' 
     }
   }
 ];
