@@ -114,6 +114,12 @@ const Home = () => {
         console.log("Login info callback data (Inisde dApp)::", receivedData);
     };
 
+    const handleProfileLogout = (data) => {
+        const receivedData = JSON.parse(JSON.stringify(data))
+        console.log("Logout message", receivedData);
+    };
+
+
 
     return (
 
@@ -123,6 +129,7 @@ const Home = () => {
             <PluralitySocialConnect
                 options={options}
                 onDataReturned={handleDataReturned}
+                onProfileLogout={handleProfileLogout}
             />
             <div style={{
                 width: '180px',
