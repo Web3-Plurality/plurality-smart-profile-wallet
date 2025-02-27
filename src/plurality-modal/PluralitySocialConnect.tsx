@@ -7,6 +7,8 @@ import PluralityApi from './PluralityApi'
 // import ProfileButton from './components/profileButton';
 import { User } from './types/payloadTypes';
 import { message } from 'antd';
+import ProfileConnectedButton from './components/ConnectedProfile';
+import ProfileButton from './components/profileButton';
 
 
 const validSteps = ['profile', 'socialConnect', 'wallet', 'profileSettings']
@@ -29,6 +31,7 @@ interface PluralitySocialConnectProps {
         theme: string
         clientId?: string
         text?: string
+        headless?: boolean
     };
     onDataReturned?: (data: LoginDataType) => void
     onProfileLogout?:(data: LogoutDataType) => void
@@ -377,7 +380,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     render() {
         return (
             <>
-                {/* {
+                {this.props.options.headless ?
                     this.state.isMetamaskConnected || this.state.isLitConnected
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
@@ -388,7 +391,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                             customizations={this.props.customization}
                             text={this.props.options.text || 'Connect Profile'}
                             handleClick={this.openSocialConnectPopup} />
-                } */}
+                : null}
 
                 <PluralityModal
                     closePlurality={this.closeSocialConnectPopup}

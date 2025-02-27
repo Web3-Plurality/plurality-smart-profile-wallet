@@ -3,7 +3,7 @@ import { PluralitySocialConnect } from '../plurality-modal'
 import { AllAccountsDataType, ConnectedAccountDataType, SignMessageDataType, VerifySignedMessageDataType } from '../plurality-modal'
 
 const Home = () => {
-    const options = { clientId: '', theme: 'light' };
+    const options = { clientId: '', theme: 'light', headless: true};
 
     const getAllAccountsData = async () => {
         const response = (await PluralitySocialConnect.getAllAccounts()) as AllAccountsDataType;
@@ -138,7 +138,7 @@ const Home = () => {
                 gap: "8px",
                 marginTop: "30px"
             }}>
-<button onClick={() => PluralitySocialConnect.connectProfile()}>Connect Profile</button>
+                <button onClick={() => PluralitySocialConnect.connectProfile()}>Connect Profile</button>
 
                 <button onClick={() => getAllAccountsData()}>Get All Accounts</button>
                 <button onClick={() => getConnectedAccountData()}>Get Connected Account</button>
