@@ -149,14 +149,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         });
     };
 
-    checkHeadlessStatus = () => {
-        if(!this.props.options.headless){
-            alert('Headless mode is not enabled!');
-            return false;
-        }
-        return true;
-    }
-
     static checkLitConnection = () => {
         const isConnected = localStorage.getItem('lit') || 'false';
         if (!JSON.parse(isConnected)) {
@@ -278,7 +270,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static navigateTo = (step: string) => {
-        if(this.instance && !this.instance.checkHeadlessStatus()) return;
         if (!this.checkLitConnection()) return;
         if(!validSteps.includes(step)){
             alert('This page does not exist!');
@@ -289,13 +280,11 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static connectProfile = () => {
-        if(this.instance && !this.instance.checkHeadlessStatus()) return;
         if (!this.checkConnection()) return;
         this.openSocialConnectPopup()
     }
 
     static disconnectProfile = () => {
-        if(this.instance && !this.instance.checkHeadlessStatus()) return;
         if (!this.checkLitConnection()) return;
         const iframe = document.getElementById('iframe') as HTMLIFrameElement;
 
