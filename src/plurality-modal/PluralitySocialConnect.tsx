@@ -304,9 +304,9 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 localStorage.setItem('lit', 'false')
             }
             if(data?.logout){
-                 const logoutData =  {
-                logout: data.isConnected,
-                message: data.token
+                const logoutData =  {
+                logout: data.logout,
+                message: 'User logged out successfully!'
             }
                this.props.onProfileLogout?.(logoutData)
             }
