@@ -3,16 +3,12 @@ import './css/styles.css'
 
 import PluralityModal from './PluralityModal';
 import PluralityApi from './PluralityApi'
-// import ProfileConnectedButton from './components/ConnectedProfile';
-// import ProfileButton from './components/profileButton';
-import { User } from './types/payloadTypes';
-import { message } from 'antd';
 import ProfileConnectedButton from './components/ConnectedProfile';
 import ProfileButton from './components/profileButton';
-
+import { User } from './types/payloadTypes';
+import { message } from 'antd';
 
 const validSteps = ['profile', 'socialConnect', 'wallet', 'profileSettings']
-
 
 const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL || '*'
 
