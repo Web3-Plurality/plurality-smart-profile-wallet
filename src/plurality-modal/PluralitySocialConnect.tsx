@@ -15,6 +15,12 @@ interface LoginDataType {
     status: boolean
     pluralityToken: string
 }
+
+interface LogoutDataType {
+    logout: boolean
+    message: string
+}
+
 interface PluralitySocialConnectProps {
     options: {
         theme: string
@@ -22,6 +28,7 @@ interface PluralitySocialConnectProps {
         text?: string
     };
     onDataReturned?: (data: LoginDataType) => void
+    onProfileLogout?:(data: LogoutDataType) => void
     customization?: {
         minWidth?: string
         height?: string
@@ -295,6 +302,13 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 this.props.onDataReturned?.(loginData)
             } else {
                 localStorage.setItem('lit', 'false')
+            }
+            if(data?.logout){
+                const logoutData =  {
+                logout: data.logout,
+                message: 'User logged out successfully!'
+            }
+               this.props.onProfileLogout?.(logoutData)
             }
         } else if (eventName === "userData") {
             this.setState((prevState) => ({
