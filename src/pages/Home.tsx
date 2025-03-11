@@ -1,9 +1,9 @@
 import React from 'react'
 import { PluralitySocialConnect } from '../plurality-modal'
 import { AllAccountsDataType, ConnectedAccountDataType, SignMessageDataType, VerifySignedMessageDataType } from '../plurality-modal'
+
 const Home = () => {
-    // const [publicInput, setPublicInput] = useState("")
-    const options = { clientId: '9a4e2a19-42e6-4b75-8710-1246439eb1db', theme: 'light' };
+    const options = { clientId: '', theme: 'light', headless: false};
 
     const getAllAccountsData = async () => {
         const response = (await PluralitySocialConnect.getAllAccounts()) as AllAccountsDataType;
@@ -138,6 +138,8 @@ const Home = () => {
                 gap: "8px",
                 marginTop: "30px"
             }}>
+                <button onClick={() => PluralitySocialConnect.connectProfile()}>Connect Profile</button>
+
                 <button onClick={() => getAllAccountsData()}>Get All Accounts</button>
                 <button onClick={() => getConnectedAccountData()}>Get Connected Account</button>
                 <button onClick={() => getMessageSignatureData("Example `personal_sign` message.")}>Sign Message</button>
@@ -149,8 +151,13 @@ const Home = () => {
                 <button onClick={() => fetchLoginInfo()}>Get Login Info</button>
                 <button onClick={() => updateConsent()}>Update Consent</button>
                 <button onClick={() => fetchSmartProfileData()}>Get Smart Profile Data</button>
+
+                <button onClick={() => PluralitySocialConnect.navigateTo('profile')}>Profile</button>
+                <button onClick={() => PluralitySocialConnect.navigateTo('wallet')}>Wallet</button>
+                <button onClick={() => PluralitySocialConnect.navigateTo('socialConnect')}>Connected Platforms</button>
+                <button onClick={() => PluralitySocialConnect.navigateTo('profileSettings')}>Update Profile</button>
+                <button onClick={() => PluralitySocialConnect.disconnectProfile()}>Logout</button>
             </div>
-            {/* <input onChange={(e)=>{}}/> */}
         </div>
     )
 }

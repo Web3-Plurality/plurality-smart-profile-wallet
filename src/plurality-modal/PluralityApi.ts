@@ -1,7 +1,6 @@
 import {
     AbiPayload,
     AddressPayload,
-    AmountPayload,
     ChainIdPayload,
     DataPayload,
     MessagePayload,
@@ -10,8 +9,8 @@ import {
     MethodParamsPayload,
     Payload,
     RawTransactionPayload,
-    ReceiverPayload,
     RpcPayload,
+    StepperData,
     TxOptionsPayload
 } from "./types/payloadTypes";
 
@@ -54,6 +53,7 @@ class PluralityApi {
                     else if (eventName === 'setPublicData' || eventName === 'setAppData' ) (payload as DataPayload).key = args[0]
                     else if (eventName === 'getPrivateData' || eventName === 'getAppData') (payload as DataPayload).key = args[0]
                     else if (eventName === 'setPrivateData') (payload as DataPayload).key = args[0]
+                    else if (eventName === 'navigateTo') (payload as StepperData).step = args[0]
                     else (payload as MessagePayload).message = args[0];
                 }
                 if (args.length > 1) {

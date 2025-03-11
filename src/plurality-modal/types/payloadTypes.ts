@@ -79,3 +79,8 @@ export interface User {
     scores: Scores[]
     consent: boolean
 }
+
+export interface StepperData extends BasePayload {
+    step: string;
+}
+
