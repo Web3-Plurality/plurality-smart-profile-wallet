@@ -1,5 +1,5 @@
 import React from 'react'
-import { PluralitySocialConnect } from '../plurality-modal'
+import { PluralitySocialConnect } from '@plurality-network/smart-profile-wallet'
 import { GetBalanceDataType, GetBlockNumberDataType, GetTransactionCountDataType, ReadFromContractDataType, SendTransactionDataType, SwitchNetworkDataType, WriteToContractDataType } from '../plurality-modal';
 import { PrivateAppData } from '../plurality-modal/types/returnTypes';
 

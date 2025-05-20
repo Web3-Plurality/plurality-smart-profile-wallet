@@ -2,10 +2,14 @@
   "name": "@plurality-network/smart-profile-wallet",
   "version": "2.19.0",
   "description": "A React component for social connect popup.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "unpkg": "dist/index.umd.js",
-  "jsdelivr": "dist/index.umd.js",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    "require": "./dist/cjs/index.js",
+    "import": "./dist/esm/index.js",
+    "types": "./dist/esm/index.d.ts"
+  },
   "keywords": [
     "web3",
     "plurality",
@@ -38,10 +42,13 @@
     "styled-components": "^6.1.13"
   },
   "scripts": {
+    "clean": "rimraf dist",
     "start": "set PORT=3001 && react-scripts start",
-    "build": "tsc",
-    "webpack": "webpack",
-    "package": "npm run build && npm run webpack",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm",
+    "webpack": "webpack --config webpack.config.cjs",
+    "package": "npm run build && npm run webpack --config webpack.config.cjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -76,6 +83,7 @@
     "@babel/preset-typescript": "^7.26.0",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@plurality-network/smart-profile-wallet": "file:.",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^9.2.6",
