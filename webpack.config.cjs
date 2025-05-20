@@ -62,7 +62,7 @@ const createCommonConfig = (tsconfigPath) => ({
 
 // Export multiple builds
 module.exports = [
-  // ✅ ESM Build
+  // ✅ ESM Build for react
   {
     ...createCommonConfig(path.resolve(__dirname, 'tsconfig.esm.json')),
     output: {
@@ -89,6 +89,24 @@ module.exports = [
       path: path.resolve(__dirname, 'dist/cjs'),
       filename: 'index.js',
       libraryTarget: 'commonjs2',
+    },
+    externals: {
+      react: 'react',
+      'react-dom': 'react-dom'
+    }
+  },
+    // ✅ ESM Build for framer/js
+  {
+    ...createCommonConfig(path.resolve(__dirname, 'tsconfig.esm.json')),
+    output: {
+      path: path.resolve(__dirname, 'dist/esm-js'),
+      filename: 'index.js',
+      library: {
+        type: 'module',
+      },
+    },
+    experiments: {
+      outputModule: true
     },
     externals: {
       react: 'react',

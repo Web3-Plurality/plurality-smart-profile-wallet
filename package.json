@@ -48,7 +48,7 @@
     "build:esm": "tsc --project tsconfig.esm.json",
     "build": "npm run clean && npm run build:cjs && npm run build:esm",
     "webpack": "webpack --config webpack.config.cjs",
-    "package": "npm run build && npm run webpack --config webpack.config.cjs",
+    "package": "npm run build && npm run webpack",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
