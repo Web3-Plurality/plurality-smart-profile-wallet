@@ -360,7 +360,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             }));
             localStorage.setItem('userData', JSON.stringify(data))
         } else if (eventName === "consentData" || eventName === "getMessageSignature") {
-            if (data?.consent || eventName === "getMessageSignature") {
+            if ((data?.consent && !data?.socialConnection) || eventName === "getMessageSignature") {
                 this.closeSocialConnectPopup();
             }
         } else if (eventName === "walletSendTransaction") {
