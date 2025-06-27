@@ -78,6 +78,7 @@ export interface User {
     rating?: number;
     scores: Scores[]
     consent: boolean
+    showRoulette: boolean
 }
 
 export interface StepperData extends BasePayload {

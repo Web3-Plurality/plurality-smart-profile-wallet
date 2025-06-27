@@ -86,7 +86,8 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 profileIcon: '',
                 ratings: 0,
                 scores: [],
-                consent: false
+                consent: false,
+                showRoulette: true
             }
         };
     }
@@ -271,6 +272,10 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             alert('This page does not exist!');
             return false;
         }
+        if (step === 'socialConnect' && !this.instance?.state.userData.showRoulette) {
+            alert('Yo have no platforms to connect!');
+            return false;
+        }
         PluralityApi.sendRequest("navigateTo", step);
         this.openSocialConnectPopup()
     }
@@ -355,6 +360,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                     profileIcon: data.avatar,
                     ratings: data.rating,
                     consent: data.consent,
+                    showRoulette: data.showRoulette,
                     ...(data.scores && { scores: data.scores })
                 }
             }));
