@@ -107,7 +107,7 @@ const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL || '*'
 const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: string, userData: User, handleClick: () => void }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { profileIcon: icon, username: name, ratings } = userData
+  const { profileIcon: icon, username: name, ratings, showRoulette } = userData
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -157,7 +157,13 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
       <Menu.Item key="3" style={{ marginTop: '10px' }} onClick={() => goToProfile('wallet')}>
         <span>Wallet</span>
       </Menu.Item>
-      <Menu.Item key="4" style={{ marginTop: '10px' }} onClick={() => goToProfile('socialConnect')}>
+      <Menu.Item key="4" style={{ marginTop: '10px' }} onClick={() => {
+        if (!showRoulette) {
+          alert('Yo have no platforms to connect!');
+          return false;
+        }
+        goToProfile('socialConnect')
+      }}>
         <span>Connect Platforms</span>
       </Menu.Item>
       <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => goToProfile('profileSettings')}>
