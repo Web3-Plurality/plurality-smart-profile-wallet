@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Button, Menu, Dropdown } from 'antd';
+import { Button, Menu, Dropdown, Skeleton } from 'antd';
 import styled from 'styled-components';
 import ProfileIcon from '../../assets/profileIcon';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import ProfileStars from '../../assets/profileStar';
 import { User } from './../../types/payloadTypes';
 
-const ConnectedButtonWrapper = styled(Button) <{ $isOpen: boolean, $theme: string }>`
+const ConnectedButtonWrapper = styled(Button)<{ $isOpen: boolean; $theme: string; $isLoading?: boolean }>`
   width: 180px;
   border-radius: 70px;
   border: none;
-  background-color: ${props => (props.$theme === 'dark' ? '#000000 !important' : 'transparent !important')};
+  background-color: ${props =>
+    props.$theme === 'dark' ? '#000000 !important' : 'transparent !important'};
   color: #fff;
   box-sizing: border-box;
   display: flex;
@@ -21,6 +22,7 @@ const ConnectedButtonWrapper = styled(Button) <{ $isOpen: boolean, $theme: strin
   transition: background-color 0.8s ease;
   overflow: hidden;
   padding: 25px 10px !important;
+  pointer-events: ${props => (props.$isLoading ? 'none' : 'auto')}; // Disable interactions when loading
 
   .avatar {
     width: 46px;
@@ -39,13 +41,16 @@ const ConnectedButtonWrapper = styled(Button) <{ $isOpen: boolean, $theme: strin
     border-radius: 50%;
   }
 
-  .anticon-caret-down, .anticon-caret-up {
+  .anticon-caret-down,
+  .anticon-caret-up {
     color: lightgray !important;
   }
 
   &:hover {
-    background-color: #acacac !important;
-    color: #fff !important;
+    background-color: ${props =>
+      props.$isLoading ? 'inherit !important' : '#acacac !important'};
+    color: ${props => (props.$isLoading ? 'inherit !important' : '#fff !important')};
+    cursor: ${props => (props.$isLoading ? 'default' : 'pointer')};
   }
 
   > svg:first-of-type {
@@ -104,7 +109,7 @@ const StyledMenu = styled(Menu) <{ $theme: string }>`
 
 const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL || '*'
 
-const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: string, userData: User, handleClick: () => void }) => {
+const ProfileConnectedButton = ({ theme, userData, handleClick, isLoading }: { theme: string, userData: User, handleClick: () => void, isLoading: boolean }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { profileIcon: icon, username: name, ratings, showRoulette } = userData
@@ -124,11 +129,11 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
     }
   }
 
-  const goToProfile = (step: string) => {
+  const goToProfile = (step: string, action = '') => {
     const iframe = document.getElementById('iframe') as HTMLIFrameElement;
     if (iframe?.contentWindow) {
       const messageId = `msg-${Date.now()}`;
-      const payload = { id: messageId, type: 'goToStep', step };
+      const payload = { id: messageId, type: 'goToStep', step, action };
       iframe.contentWindow.postMessage(payload, baseUrl);
     }
     handleClick()
@@ -151,7 +156,7 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
         </div>
       </Menu.Item>
       <hr />
-      <Menu.Item key="2" style={{ marginTop: '10px' }} onClick={() => goToProfile('profile')}>
+      <Menu.Item key="2" style={{ marginTop: '10px' }} onClick={() => goToProfile('profileSettings', 'profile')}>
         <span>Profile</span>
       </Menu.Item>
       <Menu.Item key="3" style={{ marginTop: '10px' }} onClick={() => goToProfile('wallet')}>
@@ -166,7 +171,7 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
       }}>
         <span>Connect Platforms</span>
       </Menu.Item>
-      <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => goToProfile('profileSettings')}>
+      <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => goToProfile('profileSettings', 'profileSettings')}>
         <span>Update Profile</span>
       </Menu.Item>
       <hr />
@@ -175,6 +180,22 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
       </Menu.Item>
     </StyledMenu>
   );
+
+  const skeletonButton = (
+    <ConnectedButtonWrapper $isOpen={false} $theme={theme} $isLoading={isLoading}>
+      <Skeleton.Avatar active size={46} shape="circle" />
+      <Skeleton.Input active size="small" style={{ width: 30 }} />
+    </ConnectedButtonWrapper>
+  );
+
+    if (isLoading) {
+    return (
+      <div className='content-wrapper'>
+        <div className="vertical-line"></div>
+        {skeletonButton}
+      </div>
+    );
+  }
 
   return (
     <div className='content-wrapper'>
@@ -186,7 +207,7 @@ const ProfileConnectedButton = ({ theme, userData, handleClick }: { theme: strin
         visible={isDropdownOpen}
         overlayClassName="custom-dropdown"
       >
-        <ConnectedButtonWrapper $isOpen={isDropdownOpen} $theme={theme}>
+        <ConnectedButtonWrapper $isOpen={isDropdownOpen} $theme={theme} $isLoading={isLoading}>
           <div className='avatar'>
             {icon ? <img src={icon} alt='profile-icon' /> : <ProfileIcon />}
           </div>

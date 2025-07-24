@@ -53,6 +53,7 @@ interface PluralitySocialConnectState {
     isMetamaskConnected: boolean;
     isLitConnected: boolean;
     userData: User;
+    appLoader: boolean
 }
 
 const shouldDisableButton: boolean = false;
@@ -88,7 +89,8 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 scores: [],
                 consent: false,
                 showRoulette: true
-            }
+            },
+            appLoader: true
         };
     }
     getBaseUrl() {
@@ -372,6 +374,8 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         } else if (eventName === "walletSendTransaction") {
             console.log("Wallet tsx", data)
             message.error(data)
+        } else if (eventName === "appLoaded") {
+            this.setState({ appLoader: false });
         }
 
         if (eventName === "smartProfileData") {
@@ -387,13 +391,15 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
                             userData={this.state.userData}
+                            isLoading={this.state.appLoader}
                             handleClick={this.openSocialConnectPopup}
                         />
                         : <ProfileButton
                             customizations={this.props.customization}
                             text={this.props.options.text || 'Connect Profile'}
+                            isLoading={this.state.appLoader}
                             handleClick={this.openSocialConnectPopup} />
-                : null}
+                    : null}
 
                 <PluralityModal
                     closePlurality={this.closeSocialConnectPopup}
