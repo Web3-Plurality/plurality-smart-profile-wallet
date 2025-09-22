@@ -53,6 +53,7 @@ interface PluralitySocialConnectState {
     isMetamaskConnected: boolean;
     isLitConnected: boolean;
     userData: User;
+    appLoader: boolean
 }
 
 const shouldDisableButton: boolean = false;
@@ -86,8 +87,10 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 profileIcon: '',
                 ratings: 0,
                 scores: [],
-                consent: false
-            }
+                consent: false,
+                showRoulette: true
+            },
+            appLoader: true
         };
     }
     getBaseUrl() {
@@ -271,6 +274,10 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             alert('This page does not exist!');
             return false;
         }
+        if (step === 'socialConnect' && !this.instance?.state.userData.showRoulette) {
+            alert('Yo have no platforms to connect!');
+            return false;
+        }
         PluralityApi.sendRequest("navigateTo", step);
         this.openSocialConnectPopup()
     }
@@ -355,17 +362,20 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                     profileIcon: data.avatar,
                     ratings: data.rating,
                     consent: data.consent,
+                    showRoulette: data.showRoulette,
                     ...(data.scores && { scores: data.scores })
                 }
             }));
             localStorage.setItem('userData', JSON.stringify(data))
         } else if (eventName === "consentData" || eventName === "getMessageSignature") {
-            if (data?.consent || eventName === "getMessageSignature") {
+            if ((data?.consent && !data?.socialConnection) || eventName === "getMessageSignature") {
                 this.closeSocialConnectPopup();
             }
         } else if (eventName === "walletSendTransaction") {
             console.log("Wallet tsx", data)
             message.error(data)
+        } else if (eventName === "appLoaded") {
+            this.setState({ appLoader: false });
         }
 
         if (eventName === "smartProfileData") {
@@ -381,13 +391,15 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
                             userData={this.state.userData}
+                            isLoading={this.state.appLoader}
                             handleClick={this.openSocialConnectPopup}
                         />
                         : <ProfileButton
                             customizations={this.props.customization}
                             text={this.props.options.text || 'Connect Profile'}
+                            isLoading={this.state.appLoader}
                             handleClick={this.openSocialConnectPopup} />
-                : null}
+                    : null}
 
                 <PluralityModal
                     closePlurality={this.closeSocialConnectPopup}

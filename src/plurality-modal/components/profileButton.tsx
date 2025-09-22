@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 import styled from 'styled-components'
 
 interface ButtonCustomizations {
@@ -17,6 +17,7 @@ interface ButtonCustomizations {
 
 interface ProfileButtonProps {
     text?: string
+    isLoading: boolean
     handleClick: () => void
     customizations?: ButtonCustomizations
 }
@@ -42,18 +43,34 @@ const SocialButtonWrapper = styled(Button) <ButtonCustomizations>`
 const ProfileButton = ({
     text,
     handleClick,
-    customizations
-}: ProfileButtonProps) => {
-
+    customizations,
+    isLoading = false
+  }: ProfileButtonProps) => {
+    if (isLoading) {
+      return (
+        <Skeleton.Button
+          active
+          shape="round"
+          style={{
+            minWidth: customizations?.minWidth || '180px',
+            height: customizations?.height || '40px',
+            borderRadius: customizations?.borderRadius || '10px',
+            marginTop: customizations?.marginTop || '0.5rem'
+          }}
+        />
+      );
+    }
+  
     return (
-        <SocialButtonWrapper
-            type="default"
-            onClick={handleClick}
-            {...customizations}
-        >
-            {text}
-        </SocialButtonWrapper>
-    )
-}
+      <SocialButtonWrapper
+        type="default"
+        onClick={handleClick}
+        {...customizations}
+      >
+        {text}
+      </SocialButtonWrapper>
+    );
+  }
+  
 
 export default ProfileButton
