@@ -379,7 +379,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         }
 
         if (eventName === "smartProfileData") {
-            window.localStorage.setItem("smartProfileData", data.profileData)
+            window.localStorage.setItem("smartProfileData", JSON.stringify(data.profileData))
         }
     };
 
