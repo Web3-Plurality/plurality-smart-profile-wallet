@@ -144,6 +144,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 height: 0,
             },
             isOpen: false,
+            showMask: false,
             isDisabled: shouldDisableButton,
         });
     };
