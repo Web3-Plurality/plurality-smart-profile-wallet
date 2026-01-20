@@ -50,7 +50,7 @@ interface PluralitySocialConnectState {
     showMask: boolean;
     isDisabled: boolean;
     isMetamaskConnected: boolean;
-    isLitConnected: boolean;
+    isWalletConnected: boolean;
     userData: User;
     appLoader: boolean
 }
@@ -80,7 +80,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             showMask: false,
             isDisabled: false,
             isMetamaskConnected: false,
-            isLitConnected: false,
+            isWalletConnected: false,
             userData: {
                 username: '',
                 profileIcon: '',
@@ -148,8 +148,8 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         });
     };
 
-    static checkLitConnection = () => {
-        const isConnected = localStorage.getItem('lit') || 'false';
+    static checkWalletConnection = () => {
+        const isConnected = localStorage.getItem('wallet') || 'false';
         if (!JSON.parse(isConnected)) {
             alert('Connect Profile first');
             return false;
@@ -158,7 +158,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     };
 
     static checkConnection = () => {
-        const isConnected = localStorage.getItem('lit') || 'false';
+        const isConnected = localStorage.getItem('wallet') || 'false';
         if (JSON.parse(isConnected)) {
             alert('Profile already connected!');
             return false;
@@ -167,7 +167,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     };
 
     static getMessageSignature = (messageToSign: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if (this.instance) {
             this.instance.openSocialConnectPopup();
         }
@@ -175,33 +175,33 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static verifyMessageSignature = (plainMessage: string, signedMessage: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("verifyMessageSignature", plainMessage, signedMessage);
     }
 
     static getLoginInfo = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getLoginInfo");
     }
     // EAS Immplementation
     static setPublicData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setPublicData", key, value);
     }
     static getPublicData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getPublicData", key);
     }
     static setPrivateData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setPrivateData", key, value);
     }
     static getPrivateData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getPrivateData", key);
     }
     static updateConsentOption = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if (this.instance) {
             this.instance.openSocialConnectPopup();
         }
@@ -209,22 +209,22 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static getSmartProfileData = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getSmartProfile");
     }
 
     static getAppData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getAppData", key);
     }
 
     static setAppData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setAppData", key, value);
     }
 
     static navigateTo = (step: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if(!validSteps.includes(step)){
             alert('This page does not exist!');
             return false;
@@ -243,7 +243,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static disconnectProfile = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         const iframe = document.getElementById('iframe') as HTMLIFrameElement;
 
         if (iframe?.contentWindow) {
@@ -252,16 +252,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
           iframe.contentWindow.postMessage(payload, baseUrl);
         }
     }
-
-    // static switchNetwork = (rpc: string, chainId: string) => {
-    //     if (!this.checkLitConnection()) return;
-    //     return PluralityApi.sendRequest("switchNetwork", rpc, chainId);
-    // }
-
-    // static fetchNetwork = () => {
-    //     if (!this.checkLitConnection()) return;
-    //     return PluralityApi.sendRequest("fetchNetwork");
-    // }
 
     sleep = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -290,17 +280,17 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             } else {
                 localStorage.setItem('metamask', 'false')
             }
-        } else if (eventName === "litConnection") {
-            this.setState({ isLitConnected: data.isConnected })
+        } else if (eventName === "walletConnection") {
+            this.setState({ isWalletConnected: data.isConnected })
             if (data?.isConnected) {
                 const loginData = {
                     status: data.isConnected,
                     pluralityToken: data.token
                 }
-                localStorage.setItem('lit', 'true')
+                localStorage.setItem('wallet', 'true')
                 this.props.onDataReturned?.(loginData)
             } else {
-                localStorage.setItem('lit', 'false')
+                localStorage.setItem('wallet', 'false')
             }
             if(data?.logout){
                 const logoutData =  {
@@ -339,7 +329,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return (
             <>
                 {!this.props.options.headless ?
-                    this.state.isMetamaskConnected || this.state.isLitConnected
+                    this.state.isMetamaskConnected || this.state.isWalletConnected
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
                             userData={this.state.userData}
