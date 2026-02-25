@@ -137,14 +137,11 @@ const ProfileConnectedButton1 = ({ theme }: { theme: string }) => {
       <Menu.Item key="2" style={{ marginTop: '10px' }}>
         <span>Profile</span>
       </Menu.Item>
-      <Menu.Item key="3" style={{ marginTop: '10px' }}>
-        <span>Wallet</span>
-      </Menu.Item>
-      <Menu.Item key="4" style={{ marginTop: '10px', marginBottom: '10px' }}>
+      <Menu.Item key="3" style={{ marginTop: '10px', marginBottom: '10px' }}>
         <span>Settings</span>
       </Menu.Item>
       <hr />
-      <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }}>
+      <Menu.Item key="4" style={{ marginTop: '10px', marginBottom: '10px' }}>
         <span>Logout</span>
       </Menu.Item>
     </StyledMenu>

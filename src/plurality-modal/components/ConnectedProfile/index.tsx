@@ -159,10 +159,7 @@ const ProfileConnectedButton = ({ theme, userData, handleClick, isLoading }: { t
       <Menu.Item key="2" style={{ marginTop: '10px' }} onClick={() => goToProfile('profileSettings', 'profile')}>
         <span>Profile</span>
       </Menu.Item>
-      <Menu.Item key="3" style={{ marginTop: '10px' }} onClick={() => goToProfile('wallet')}>
-        <span>Wallet</span>
-      </Menu.Item>
-      <Menu.Item key="4" style={{ marginTop: '10px' }} onClick={() => {
+      <Menu.Item key="3" style={{ marginTop: '10px' }} onClick={() => {
         if (!showRoulette) {
           alert('Yo have no platforms to connect!');
           return false;
@@ -171,11 +168,11 @@ const ProfileConnectedButton = ({ theme, userData, handleClick, isLoading }: { t
       }}>
         <span>Connect Platforms</span>
       </Menu.Item>
-      <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => goToProfile('profileSettings', 'profileSettings')}>
+      <Menu.Item key="4" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => goToProfile('profileSettings', 'profileSettings')}>
         <span>Update Profile</span>
       </Menu.Item>
       <hr />
-      <Menu.Item key="6" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={handleLogout}>
+      <Menu.Item key="5" style={{ marginTop: '10px', marginBottom: '10px' }} onClick={handleLogout}>
         <span>Logout</span>
       </Menu.Item>
     </StyledMenu>

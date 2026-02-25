@@ -6,9 +6,8 @@ import PluralityApi from './PluralityApi'
 import ProfileConnectedButton from './components/ConnectedProfile';
 import ProfileButton from './components/profileButton';
 import { User } from './types/payloadTypes';
-import { message } from 'antd';
 
-const validSteps = ['profile', 'socialConnect', 'wallet', 'profileSettings']
+const validSteps = ['profile', 'socialConnect', 'profileSettings']
 
 const baseUrl = process.env.REACT_APP_WIDGET_BASE_URL || '*'
 
@@ -51,7 +50,7 @@ interface PluralitySocialConnectState {
     showMask: boolean;
     isDisabled: boolean;
     isMetamaskConnected: boolean;
-    isLitConnected: boolean;
+    isWalletConnected: boolean;
     userData: User;
     appLoader: boolean
 }
@@ -81,7 +80,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             showMask: false,
             isDisabled: false,
             isMetamaskConnected: false,
-            isLitConnected: false,
+            isWalletConnected: false,
             userData: {
                 username: '',
                 profileIcon: '',
@@ -144,12 +143,13 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
                 height: 0,
             },
             isOpen: false,
+            showMask: false,
             isDisabled: shouldDisableButton,
         });
     };
 
-    static checkLitConnection = () => {
-        const isConnected = localStorage.getItem('lit') || 'false';
+    static checkWalletConnection = () => {
+        const isConnected = localStorage.getItem('wallet') || 'false';
         if (!JSON.parse(isConnected)) {
             alert('Connect Profile first');
             return false;
@@ -158,7 +158,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     };
 
     static checkConnection = () => {
-        const isConnected = localStorage.getItem('lit') || 'false';
+        const isConnected = localStorage.getItem('wallet') || 'false';
         if (JSON.parse(isConnected)) {
             alert('Profile already connected!');
             return false;
@@ -166,23 +166,8 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return true;
     };
 
-    static getAllAccounts = async (rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("getAllAccounts");
-    }
-
-    static getConnectedAccount = async (rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return await PluralityApi.sendRequest("getConnectedAccount");
-    }
-
-    static getBalance = (rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("getBalance");
-    }
-
     static getMessageSignature = (messageToSign: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if (this.instance) {
             this.instance.openSocialConnectPopup();
         }
@@ -190,63 +175,33 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static verifyMessageSignature = (plainMessage: string, signedMessage: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("verifyMessageSignature", plainMessage, signedMessage);
     }
 
-    static sendTransaction = (rawTx: string, rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        if (this.instance) {
-            this.openSocialConnectPopup()
-        }
-        return PluralityApi.sendRequest("sendTransaction", rawTx, rpc, chainId);
-    }
-
-    static getBlockNumber = (rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("getBlockNumber");
-    }
-
-    static getTransactionCount = (address: string, rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("getTransactionCount", address, rpc, chainId);
-    }
-
-    static readFromContract = (address: string, abi: string, methodName: string, methodParams: string, rpc: string = '', chainId: string = '') => {
-        if (!this.checkLitConnection()) return;
-        return PluralityApi.sendRequest("readFromContract", address, abi, methodName, methodParams, rpc, chainId);
-    }
-
-    static writeToContract = (address: string, abi: string, methodName: string, methodParams: string, rpc: string = '', chainId: string = '', options: string) => {
-        if (!this.checkLitConnection()) return;
-        if (this.instance) {
-            this.instance.openSocialConnectPopup();
-        }
-        return PluralityApi.sendRequest("writeToContract", address, abi, methodName, methodParams, rpc, chainId, options);
-    }
     static getLoginInfo = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getLoginInfo");
     }
     // EAS Immplementation
     static setPublicData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setPublicData", key, value);
     }
     static getPublicData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getPublicData", key);
     }
     static setPrivateData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setPrivateData", key, value);
     }
     static getPrivateData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getPrivateData", key);
     }
     static updateConsentOption = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if (this.instance) {
             this.instance.openSocialConnectPopup();
         }
@@ -254,22 +209,22 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static getSmartProfileData = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getSmartProfile");
     }
 
     static getAppData = (key: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("getAppData", key);
     }
 
     static setAppData = (key: string, value: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         return PluralityApi.sendRequest("setAppData", key, value);
     }
 
     static navigateTo = (step: string) => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         if(!validSteps.includes(step)){
             alert('This page does not exist!');
             return false;
@@ -288,7 +243,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
     }
 
     static disconnectProfile = () => {
-        if (!this.checkLitConnection()) return;
+        if (!this.checkWalletConnection()) return;
         const iframe = document.getElementById('iframe') as HTMLIFrameElement;
 
         if (iframe?.contentWindow) {
@@ -297,16 +252,6 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
           iframe.contentWindow.postMessage(payload, baseUrl);
         }
     }
-
-    // static switchNetwork = (rpc: string, chainId: string) => {
-    //     if (!this.checkLitConnection()) return;
-    //     return PluralityApi.sendRequest("switchNetwork", rpc, chainId);
-    // }
-
-    // static fetchNetwork = () => {
-    //     if (!this.checkLitConnection()) return;
-    //     return PluralityApi.sendRequest("fetchNetwork");
-    // }
 
     sleep = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -335,17 +280,17 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             } else {
                 localStorage.setItem('metamask', 'false')
             }
-        } else if (eventName === "litConnection") {
-            this.setState({ isLitConnected: data.isConnected })
+        } else if (eventName === "walletConnection") {
+            this.setState({ isWalletConnected: data.isConnected })
             if (data?.isConnected) {
                 const loginData = {
                     status: data.isConnected,
                     pluralityToken: data.token
                 }
-                localStorage.setItem('lit', 'true')
+                localStorage.setItem('wallet', 'true')
                 this.props.onDataReturned?.(loginData)
             } else {
-                localStorage.setItem('lit', 'false')
+                localStorage.setItem('wallet', 'false')
             }
             if(data?.logout){
                 const logoutData =  {
@@ -371,15 +316,12 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
             if ((data?.consent && !data?.socialConnection) || eventName === "getMessageSignature") {
                 this.closeSocialConnectPopup();
             }
-        } else if (eventName === "walletSendTransaction") {
-            console.log("Wallet tsx", data)
-            message.error(data)
         } else if (eventName === "appLoaded") {
             this.setState({ appLoader: false });
         }
 
         if (eventName === "smartProfileData") {
-            window.localStorage.setItem("smartProfileData", data.profileData)
+            window.localStorage.setItem("smartProfileData", JSON.stringify(data.profileData))
         }
     };
 
@@ -387,7 +329,7 @@ export class PluralitySocialConnect extends Component<PluralitySocialConnectProp
         return (
             <>
                 {!this.props.options.headless ?
-                    this.state.isMetamaskConnected || this.state.isLitConnected
+                    this.state.isMetamaskConnected || this.state.isWalletConnected
                         ? <ProfileConnectedButton
                             theme={this.props.options.theme}
                             userData={this.state.userData}
